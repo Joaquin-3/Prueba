@@ -113,6 +113,7 @@ STATICFILES_DIRS = [STATIC_DIR]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 MEDIA_URL = '/media/'
+MEDIA_ROOT = MEDIA_DIR
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

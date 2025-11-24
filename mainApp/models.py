@@ -1,3 +1,76 @@
 from django.db import models
 
-# Create your models here.
+
+class Categoria(models.Model):
+    nombre = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+
+class Estado(models.TextChoices):
+    SOLICITADO = 'Solicitado', 'Solicitado'
+    APROBADO = 'Aprobado', 'Aprobado'
+    EN_PROCESO = 'En Proceso', 'En Proceso'
+    REALIZADO = 'Realizado', 'Realizado'
+    ENTREGADO = 'Entregado', 'Entregado'
+    FINALIZADO = 'Finalizado', 'Finalizado'
+    CANCELADO = 'Cancelado', 'Cancelado'
+
+
+class Origen(models.TextChoices):
+    FACEBOOK = 'Facebook', 'Facebook'
+    INSTAGRAM = 'Instagram', 'Instagram'
+    PRESENCIAL = 'Presencial', 'Presencial'
+    WHATSAPP = 'WhatsApp', 'WhatsApp'
+    SITIO_WEB = 'Sitio Web', 'Sitio Web'
+    TIKTOK = 'TikTok', 'TikTok'
+
+
+class EstadoPago(models.TextChoices):
+    PENDIENTE = 'Pendiente', 'Pendiente'
+    PARCIAL = 'Parcial', 'Parcial'
+    PAGADO = 'Pagado', 'Pagado'
+
+
+class Producto(models.Model):
+    nombre = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    descripcion = models.TextField()
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    imagen = models.ImageField(upload_to='productos/')
+
+
+    estado = models.CharField(
+        max_length=20,
+        choices=Estado.choices,
+        default=Estado.SOLICITADO
+    )
+
+    origen = models.CharField(
+        max_length=20,
+        choices=Origen.choices,
+        default=Origen.PRESENCIAL
+    )
+
+    estado_pago = models.CharField(
+        max_length=20,
+        choices=EstadoPago.choices,
+        default=EstadoPago.PENDIENTE
+    )
+
+    def __str__(self):
+        return self.nombre
+
+
+class Insumo(models.Model):
+    nombre = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=50)
+    cantidad = models.IntegerField()
+    marca = models.CharField(max_length=100)
+    color = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
