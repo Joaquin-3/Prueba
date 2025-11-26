@@ -1,0 +1,46 @@
+ <div class="container">
+                <h1 class="text-center">Tienda Online</h1>
+                <div class="row">
+                    {% for producto in productos %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img
+                                src="{{ producto.imagen.url }}"
+                                class="card-img-top"
+                                alt="{{ producto.nombre }}"
+                            />
+                            <div class="card-body">
+                                <h5 class="card-title">{{ producto.nombre }}</h5>
+                                <p class="card-text">{{ producto.descripcion }}</p>
+                                <p class="card-text">Precio: ${{ producto.precio }}</p>
+                                <a href="#" class="btn btn-primary">Comprar</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+
+             <div class="col">
+                    <div class=" alert alert-success text-dark">
+                        <button  class="border border-0 bg-transparent"> 
+                            <a href="a" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">
+                            <h1 class="text-center">Polerones</h1></a></button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class=" alert alert-warning text-dark">
+                        <button  class="border border-0 bg-transparent"> 
+                            <a href="a" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">
+                            <h1 class="text-center">Tazas</h1></a></button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class=" alert alert-dark text-dark">
+                        <button class="border border-0 bg-transparent"> 
+                            <a href="a" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">
+                            <h1 class="text-center">Articulos 3D</a></h1></button>
+                    </div>
+                </div>
