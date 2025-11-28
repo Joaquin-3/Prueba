@@ -16,6 +16,26 @@
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous"
         />
+
+
+        <style>
+            .imagen-contenedor {
+                width: 200px;         
+                height: 200px;         
+                margin: 0 auto;        
+                display: flex;
+                align-items: center;    
+                justify-content: center; 
+                background-color: #f5f5f5;
+                border: 1px solid #ddd;  
+            }
+
+            .imagen-producto {
+                max-width: 100%;       
+                max-height: 100%;      
+                object-fit: contain;  
+            }
+        </style>
     </head>
 
     <body>
@@ -24,17 +44,35 @@
         </header>
         <main class="container mt-4 mb-4 alert alert-primary text-center text-dark">
             <h1>
-                Catalogo de Productos
+                {{categoria.nombre}}
             </h1>
         </main>
         <div class="container mt-5 mx-5">
             <div class="row mt-5">
             {% for prod in productos %}
                 <div class="col-3">
-                    <div class=" border border-2 text-dark">
+                    <div class="card border border-2 text-dark">
+
                         <h2 class="text-center">
                             {{ prod.nombre }}
                         </h2>
+                        <div class="d-flex justify-content-center flex-wrap mt-2 text-center">
+                            {% if prod.imagen1 %}
+                                <div class="imagen-contenedor">
+                                    <img src="{{ prod.imagen1.url }}" alt="{{ prod.nombre }}" class="imagen-producto" />
+                                </div>
+                            {% elif prod.imagen2 %}
+                                <div class="imagen-contenedor">
+                                    <img src="{{ prod.imagen2.url }}" alt="{{ prod.nombre }}" class="imagen-producto" />
+                                </div>
+                            {% elif prod.imagen3 %}
+                                <div class="imagen-contenedor">
+                                    <img src="{{ prod.imagen3.url }}" alt="{{ prod.nombre }}" class="imagen-producto" />
+                                </div>
+                            {% else %}
+                                <p>No hay imagen disponible</p>
+                            {% endif %}
+                        </div>  
                         <p class="text-center">
                             {{ prod.descripcion }}
                         </p>
@@ -46,6 +84,18 @@
             {% endfor %}
 
             </div>
+        </div>
+
+        <div class="container mt-5">
+            <button
+                type="button"
+                class="btn btn-primary"
+                onclick="window.history.back()"
+            >
+                <a href="/" class="text-white text-decoration-none">
+                    Volver
+                </a>
+            </button>
         </div>
     </body>
 </html>

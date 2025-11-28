@@ -5,7 +5,9 @@ from .models import Producto, Categoria, Insumo, Pedido
 
 def home(request):
     categoria = Categoria.objects.all()
-    data = {'categoria': categoria}
+    productos = Producto.objects.all()
+    data = {'categoria': categoria, 'productos': productos}
+    
     return render(request, 'home.html',data)
 
 def productos(request, categoria_slug):
