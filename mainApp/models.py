@@ -87,6 +87,15 @@ class Pedido(models.Model):
     )
             
 
+    def fin(self):
+        if self.estado == Estado.FINALIZADO:
+            if self.estado_pago == EstadoPago.PAGADO:
+                return True
+            else:
+                return 'No se encuentra pagado'
+        else: 
+            return False
+
     def __str__(self):
         return f"Pedido de {self.cantidad} x {self.producto.nombre}"
 

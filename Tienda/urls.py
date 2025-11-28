@@ -9,7 +9,8 @@ from mainApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('categoria/<slug:categoria_slug>/', views.productos, name='productos_por_categoria')
+    path('categoria/<slug:categoria_slug>/', views.productos, name='productos_por_categoria'),
+   path('detalle/<slug:producto_slug>/', views.detalle, name='detalle'),
 
 ]
 

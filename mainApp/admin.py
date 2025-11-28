@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Categoria, Producto, Insumo, Pedido
-from django.utils.html import format_html
 
 # Register your models here.
 

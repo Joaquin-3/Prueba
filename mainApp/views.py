@@ -1,5 +1,4 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, get_object_or_404
 from .models import Producto, Categoria, Insumo, Pedido
 # Create your views here.
 
@@ -20,3 +19,11 @@ def productos(request, categoria_slug):
     }
 
     return render(request, 'productos.html', data)
+
+
+def detalle(request, producto_slug):
+    producto = get_object_or_404(Producto, slug=producto_slug)
+
+    data = {'producto': producto}
+
+    return render(request, 'detalle.html', data)

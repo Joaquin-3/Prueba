@@ -79,7 +79,18 @@
                         <h3 class="text-center">
                             ${{ prod.precio }}
                         </h3>
-                    </div>    
+                        <div class="container mt-2 text-center mb-2">
+                            <button
+                                type="button"
+                                class="btn btn-primary "
+                            >
+                                <a href="{% url 'detalle' prod.slug %}" class="text-white text-decoration-none">
+                                    Detalle
+                                </a>
+                            </button>
+                        </div>
+                    </div>   
+                     
                 </div>
             {% endfor %}
 
@@ -92,9 +103,8 @@
                 class="btn btn-primary"
                 onclick="window.history.back()"
             >
-                <a href="/" class="text-white text-decoration-none">
                     Volver
-                </a>
+
             </button>
         </div>
     </body>
