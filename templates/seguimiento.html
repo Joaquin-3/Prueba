@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Seguimiento del Pedido</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h1 class="text-center mb-4">Seguimiento del Pedido</h1>
+
+        <h3>Estado del Pedido:</h3>
+        <p class="fs-5"><strong>{{ pedido.estado }}</strong></p>
+
+        <h3>Estado de Pago:</h3>
+        <p class="fs-5"><strong>{{ pedido.estado_pago }}</strong></p>
+
+        <h3>Producto:</h3>
+        <p>{{ pedido.producto.nombre }}</p>
+
+        <h3>Datos del Cliente:</h3>
+        <p><strong>Nombre:</strong> {{ pedido.nombre }}</p>
+        <p><strong>Email:</strong> {{ pedido.email }}</p>
+        <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
+
+        <h3>Cantidad Solicitada:</h3>
+        <p>{{ pedido.cantidad }}</p>
+        
+        <h3>Precio</h3>
+        <p><strong>Precio unitario:</strong> ${{ pedido.producto.precio }}</p>
+        <p><strong>Precio final:</strong> ${{ pedido.precio_final }}</p>
+
+        <h3>Fecha en que se solicitó:</h3>
+        <p>{{ pedido.fecha_pedido }}</p>
+
+        {% if pedido.fecha_necesitado %}
+        <h3>Fecha requerida por el cliente:</h3>
+        <p>{{ pedido.fecha_necesitado }}</p>
+        {% endif %}
+
+        {% if pedido.imagen %}
+        <h3>Imagen enviada por el cliente:</h3>
+        <img src="{{ pedido.imagen.url }}" class="img-fluid border mt-2">
+        {% endif %}
+
+        <div class="mt-4 text-center">
+            <a href="/" class="btn btn-primary">Volver al Inicio</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

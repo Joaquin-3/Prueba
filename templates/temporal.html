@@ -44,3 +44,34 @@
                             <h1 class="text-center">Articulos 3D</a></h1></button>
                     </div>
                 </div>
+
+
+
+
+
+
+
+
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.IntegerField()
+    fecha_pedido = models.DateTimeField(auto_now_add=True)
+    fecha_entrega = models.DateTimeField(null=True, blank=True)
+
+    estado = models.CharField(
+        max_length=20,
+        choices=Estado.choices,
+        default=Estado.SOLICITADO
+    )
+
+    origen = models.CharField(
+        max_length=20,
+        choices=Origen.choices,
+        default=Origen.PRESENCIAL
+    )
+
+    estado_pago = models.CharField(
+        max_length=20,
+        choices=EstadoPago.choices,
+        default=EstadoPago.PENDIENTE
+    )
+            

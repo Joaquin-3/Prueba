@@ -1,6 +1,5 @@
 from django.db import models
-from django.utils.html import format_html
-
+import uuid
 
 
 class Categoria(models.Model):
@@ -63,10 +62,23 @@ class Insumo(models.Model):
         return self.nombre
     
 class Pedido(models.Model):
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=100)
+    email = models.EmailField()
+    telefono = models.IntegerField(null=True)
+    producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
+    descripcion = models.TextField()
     cantidad = models.IntegerField()
-    fecha_pedido = models.DateTimeField(auto_now_add=True)
-    fecha_entrega = models.DateTimeField(null=True, blank=True)
+    plataforma = models.CharField(max_length=50, default="pagina web")
+    token = models.CharField(max_length=50, unique=True, default=uuid.uuid4)
+    fecha_pedido = models.DateField(auto_now_add=True)
+    fecha_necesitado = models.DateField(null=True)
+
+    imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
+    origen = models.CharField(
+        max_length=20,
+        choices=Origen.choices,
+        default=Origen.PRESENCIAL
+    )
 
     estado = models.CharField(
         max_length=20,
@@ -74,28 +86,17 @@ class Pedido(models.Model):
         default=Estado.SOLICITADO
     )
 
-    origen = models.CharField(
-        max_length=20,
-        choices=Origen.choices,
-        default=Origen.PRESENCIAL
-    )
-
     estado_pago = models.CharField(
         max_length=20,
         choices=EstadoPago.choices,
         default=EstadoPago.PENDIENTE
     )
-            
 
-    def fin(self):
-        if self.estado == Estado.FINALIZADO:
-            if self.estado_pago == EstadoPago.PAGADO:
-                return True
-            else:
-                return 'No se encuentra pagado'
-        else: 
-            return False
+    def precio_final(self):
+        if self.producto and self.cantidad:
+            return self.producto.precio * self.cantidad
+        return 0
 
-    def __str__(self):
-        return f"Pedido de {self.cantidad} x {self.producto.nombre}"
+def __str__(self):
+        return f"Pedido de {self.cantidad} x {self.producto.nombre} - Total: ${self.precio_final}"
 

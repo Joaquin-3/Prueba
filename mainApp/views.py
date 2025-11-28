@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Producto, Categoria, Insumo, Pedido
+from .models import Producto, Categoria, Pedido
+from mainApp.forms import FormPedido
+import uuid
+
 # Create your views here.
 
 def home(request):
@@ -27,3 +30,40 @@ def detalle(request, producto_slug):
     data = {'producto': producto}
 
     return render(request, 'detalle.html', data)
+
+def pedido(request):
+    form = FormPedido()
+
+    if request.method == 'POST':
+        form = FormPedido(request.POST, request.FILES)
+
+        if form.is_valid():
+            pedido = form.save(commit=False)
+
+            pedido.token = uuid.uuid4().hex[:12]                     
+            pedido.save()
+
+            url_seguimiento = request.build_absolute_uri(
+                f"/seguimiento/{pedido.token}/"
+            )
+
+            return render(
+            request,
+            "pedido_creado.html",
+            {
+                "url": url_seguimiento,
+                "token": pedido.token
+            }
+            )
+
+    data = {'form': form}
+    return render(request, 'formulario.html', data)
+
+def seguimiento(request, token):
+    pedido = get_object_or_404(Pedido, token=token)
+
+    data = {
+        "pedido": pedido
+    }
+
+    return render(request, "seguimiento.html", data)
