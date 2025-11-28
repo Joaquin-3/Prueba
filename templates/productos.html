@@ -26,7 +26,26 @@
             <h1>
                 Catalogo de Productos
             </h1>
-
         </main>
+        <div class="container mt-5 mx-5">
+            <div class="row mt-5">
+            {% for prod in productos %}
+                <div class="col-3">
+                    <div class=" border border-2 text-dark">
+                        <h2 class="text-center">
+                            {{ prod.nombre }}
+                        </h2>
+                        <p class="text-center">
+                            {{ prod.descripcion }}
+                        </p>
+                        <h3 class="text-center">
+                            ${{ prod.precio }}
+                        </h3>
+                    </div>    
+                </div>
+            {% endfor %}
+
+            </div>
+        </div>
     </body>
 </html>

@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.html import format_html
+
 
 
 class Categoria(models.Model):
@@ -34,13 +36,17 @@ class EstadoPago(models.TextChoices):
     PAGADO = 'Pagado', 'Pagado'
 
 
+
 class Producto(models.Model):
     nombre = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     descripcion = models.TextField()
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    imagen = models.ImageField(upload_to='productos/')
+
+    imagen1 = models.ImageField(upload_to='productos/', blank=True, null=True)
+    imagen2 = models.ImageField(upload_to='productos/', blank=True, null=True)
+    imagen3 = models.ImageField(upload_to='productos/', blank=True, null=True)
 
     def __str__(self):
         return self.nombre
@@ -60,6 +66,7 @@ class Pedido(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
     fecha_pedido = models.DateTimeField(auto_now_add=True)
+    fecha_entrega = models.DateTimeField(null=True, blank=True)
 
     estado = models.CharField(
         max_length=20,
@@ -78,6 +85,8 @@ class Pedido(models.Model):
         choices=EstadoPago.choices,
         default=EstadoPago.PENDIENTE
     )
+            
 
     def __str__(self):
         return f"Pedido de {self.cantidad} x {self.producto.nombre}"
+

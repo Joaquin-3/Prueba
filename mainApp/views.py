@@ -11,6 +11,10 @@ def home(request):
 def productos(request, categoria_slug):
     categoria = Categoria.objects.get(slug=categoria_slug)
     productos = Producto.objects.filter(categoria=categoria)
-    data = {'productos': productos, 'categoria': categoria}
+
+    data = {
+        'categoria': categoria,
+        'productos': productos
+    }
+
     return render(request, 'productos.html', data)
-        

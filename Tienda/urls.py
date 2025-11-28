@@ -9,7 +9,8 @@ from mainApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('/productos/<str:slug>', views.productos, name='productos'),
+    path('categoria/<slug:categoria_slug>/', views.productos, name='productos_por_categoria')
+
 ]
 
 if settings.DEBUG:

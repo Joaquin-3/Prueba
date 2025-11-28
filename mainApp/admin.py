@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Categoria, Producto, Insumo, Pedido
+from django.utils.html import format_html
 
 # Register your models here.
 
@@ -13,6 +14,7 @@ class ProductoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'categoria', 'precio')
     prepopulated_fields = {'slug': ('nombre',)}
     list_filter = ('categoria',)
+
 
 @admin.register(Insumo)
 class InsumoAdmin(admin.ModelAdmin):

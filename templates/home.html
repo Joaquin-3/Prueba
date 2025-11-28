@@ -31,7 +31,7 @@
                 <div class="col-3">
                     <div class=" alert alert-success text-dark">
                         <button  class="border border-0 bg-transparent"> 
-                            <a href="/productos/{{ cat.slug }}" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">
+                            <a href="{% url 'productos_por_categoria' cat.slug %}" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">
                             <h1 class="text-center">
                                 {{ cat.nombre }}
                             </h1></a></button>
