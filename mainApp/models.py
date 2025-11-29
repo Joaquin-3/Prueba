@@ -37,11 +37,11 @@ class EstadoPago(models.TextChoices):
 
 
 class Producto(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
     descripcion = models.TextField()
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    precio = models.DecimalField(max_digits=15, decimal_places=0)
 
     imagen1 = models.ImageField(upload_to='productos/', blank=True, null=True)
     imagen2 = models.ImageField(upload_to='productos/', blank=True, null=True)
@@ -62,13 +62,12 @@ class Insumo(models.Model):
         return self.nombre
     
 class Pedido(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=50)
     email = models.EmailField()
     telefono = models.IntegerField(null=True)
     producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
-    descripcion = models.TextField()
+    descripcion = models.TextField(max_length=70)
     cantidad = models.IntegerField()
-    plataforma = models.CharField(max_length=50, default="pagina web")
     token = models.CharField(max_length=50, unique=True, default=uuid.uuid4)
     fecha_pedido = models.DateField(auto_now_add=True)
     fecha_necesitado = models.DateField(null=True)
@@ -77,7 +76,7 @@ class Pedido(models.Model):
     origen = models.CharField(
         max_length=20,
         choices=Origen.choices,
-        default=Origen.PRESENCIAL
+        default=Origen.SITIO_WEB
     )
 
     estado = models.CharField(

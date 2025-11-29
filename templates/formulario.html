@@ -20,15 +20,17 @@
 
     <body>
 
+        <div class="container alert alert-primary display-3 mt-5 text-center text-dark">
+            Creacion de Pedido
+        </div>
 
         <div class="container mt-5 ">
             <form method="POST"> 
                 {% csrf_token %}
-                {{form.as_table}}
+                {{form.as_p}}
 
            
 
-                <h2>{{pedido.token}}</h2>
 
 
 
