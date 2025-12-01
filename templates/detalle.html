@@ -41,7 +41,7 @@
         <h3> Descripcion:</h3>
         <p>{{producto.descripcion}}</p>
         <h3> Precio Unitario:</h3>
-        <p>{{producto.precio}}</p>
+        <p>${{producto.precio}}</p>
 
         </div>
         <div class="container mt-5 ">
@@ -56,7 +56,7 @@
                     <button
                     type="button"
                     class="btn btn-success ">
-                        <a href="/pedidos/add" class="text-white link-offset-2 link-underline link-underline-opacity-0">
+                        <a href="/pedidos/add/{{ producto.slug }}" class="text-white link-offset-2 link-underline link-underline-opacity-0">
                             Solicitar producto
                         </a>
                     

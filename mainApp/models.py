@@ -49,6 +49,10 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+    def save(self, *args, **kwargs):
+        self.nombre = self.nombre.capitalize()
+        super().save(*args, **kwargs)
 
 
 class Insumo(models.Model):
@@ -65,12 +69,12 @@ class Pedido(models.Model):
     nombre = models.CharField(max_length=50)
     email = models.EmailField()
     telefono = models.IntegerField(null=True)
-    producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto,on_delete=models.CASCADE, null=True, blank=True)
     descripcion = models.TextField(max_length=70)
     cantidad = models.IntegerField()
     token = models.CharField(max_length=50, unique=True, default=uuid.uuid4)
     fecha_pedido = models.DateField(auto_now_add=True)
-    fecha_necesitado = models.DateField(null=True)
+    fecha_entrega_requerida = models.DateField(null=True)
 
     imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
     origen = models.CharField(
@@ -92,10 +96,30 @@ class Pedido(models.Model):
     )
 
     def precio_final(self):
+        if not self.producto and self.cantidad:
+            return 20000 * self.cantidad
+
         if self.producto and self.cantidad:
             return self.producto.precio * self.cantidad
-        return 0
 
-def __str__(self):
-        return f"Pedido de {self.cantidad} x {self.producto.nombre} - Total: ${self.precio_final}"
+        return 0
+    
+
+    def save(self, *args, **kwargs):
+        self.nombre = self.nombre.upper()
+
+        if self.producto:
+            self.precio = self.producto.precio
+        else:
+            self.precio = 20000  
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        if self.producto:
+            nombre_producto = self.producto.nombre
+        else:
+            nombre_producto = "Personalizado"
+
+        return f"Pedido de {self.cantidad} x {nombre_producto} - Total: ${self.precio_final()}"
 

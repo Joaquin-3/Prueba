@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Producto, Categoria, Pedido
 from mainApp.forms import FormPedido
-import uuid
+from django.db import IntegrityError, DatabaseError
 
 # Create your views here.
 
@@ -31,33 +31,41 @@ def detalle(request, producto_slug):
 
     return render(request, 'detalle.html', data)
 
-def pedido(request):
-    form = FormPedido()
+def pedido(request, producto_slug=None):
+    producto_preseleccionado = None
+    if producto_slug:
+        producto_preseleccionado = get_object_or_404(Producto, slug=producto_slug)
 
-    if request.method == 'POST':
-        form = FormPedido(request.POST, request.FILES)
+    if request.method == "POST":
+        form = FormPedido(request.POST, request.FILES, producto_inicial=producto_preseleccionado)
 
         if form.is_valid():
             pedido = form.save(commit=False)
 
-            pedido.token = uuid.uuid4().hex[:12]                     
-            pedido.save()
+            if producto_preseleccionado:
+                pedido.producto = producto_preseleccionado
 
-            url_seguimiento = request.build_absolute_uri(
-                f"/seguimiento/{pedido.token}/"
-            )
+            try:
+                pedido.save()
+                url = request.build_absolute_uri(f"/seguimiento/{pedido.token}/")
+                return render(request, "pedido_creado.html", {
+                    "token": pedido.token,
+                    "url": url
+                })
+            except IntegrityError as e:
+                form.add_error(None, "Error de integridad en la base de datos. Revise los datos ingresados.")
+            except DatabaseError as e:
+                form.add_error(None, "Error al guardar en la base de datos. Intente nuevamente.")
+            except Exception as e:
+                form.add_error(None, f"Ocurrió un error inesperado: {str(e)}")
 
-            return render(
-            request,
-            "pedido_creado.html",
-            {
-                "url": url_seguimiento,
-                "token": pedido.token
-            }
-            )
+    else:
+        form = FormPedido(producto_inicial=producto_preseleccionado)
 
-    data = {'form': form}
-    return render(request, 'formulario.html', data)
+    return render(request, "formulario.html", {
+        "form": form,
+        "producto_preseleccionado": producto_preseleccionado
+    })
 
 def seguimiento(request, token=None):
     if token is None:

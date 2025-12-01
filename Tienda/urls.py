@@ -13,6 +13,8 @@ urlpatterns = [
     path('detalle/<slug:producto_slug>/', views.detalle, name='detalle'),
     path('pedidos/add',views.pedido, name='pedido'),
     path('seguimiento/<slug:token>/', views.seguimiento, name='seguimiento'),
+    path('pedidos/add/', views.pedido, name='pedido'),
+    path('pedidos/add/<slug:producto_slug>/', views.pedido, name='pedido_con_producto'),
 
 ]
 

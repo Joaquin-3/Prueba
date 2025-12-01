@@ -25,14 +25,25 @@
         </div>
 
         <div class="container mt-5 ">
-            <form method="POST"> 
+            <form method="POST" enctype="multipart/form-data"> 
                 {% csrf_token %}
-                {{form.as_p}}
 
-           
+                {% if producto_preseleccionado %}
+                <div class="alert alert-success text-center">
+                    Estás solicitando el producto: <strong>{{ producto_preseleccionado.nombre }}</strong>
+                </div>
+                {% else %}
+                <div class="alert alert-info text-center">
+                    Estás realizando un <strong>pedido personalizado</strong>.  
+                    Debes subir una imagen de referencia.
+                    <br>
+                    <strong>
+                        Cada pedido personalizado tiene un precio unitario de 20.000
+                    </strong>
+                </div>
+                {% endif %}
 
-
-
+                {{ form.as_p }}
 
             <button
                 type="submit"
@@ -47,7 +58,14 @@
             >
                     Cancelar
             </button>
+
             </form>
+
+
+
+
+
+
         </div>
 
 
