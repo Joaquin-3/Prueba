@@ -34,6 +34,14 @@
                 max-height: 100%;      
                 object-fit: contain;  
             }
+
+            .amarillo{
+                background-color: #e3fb08ff;;
+            }
+
+            .verde{
+                background-color: #5ed772ff;
+            }
         </style>
 
     </head>
@@ -42,14 +50,14 @@
         <header>
             <!-- place navbar here -->
         </header>
-        <main class="container mt-4 mb-4 alert alert-primary text-center text-dark">
+        <main class="container alert mt-4 mb-4 amarillo text-center text-dark">
             <h1>
                 Catalogo de Productos
             </h1>
            <div class="row mt-5">
             {% for cat in categoria %}
                 <div class="col-3">
-                    <div class=" alert alert-success text-dark">
+                    <div class=" verde alert text-dark">
                         <button  class="border border-0 bg-transparent"> 
                             <a href="{% url 'productos_por_categoria' cat.slug %}" class="link-offset-2 link-underline link-underline-opacity-0 text-dark">
                             <h1 class="text-center">
@@ -63,7 +71,7 @@
 
 
         <div class="container mt-5 mb-3">
-            <div class="alert alert-info text-center">Para ver el estado de su pedido busque con su token aqui</div>
+            <div class="alert alert-info text-center">Para ver el estado de su pedido busque con su token</div>
                 <form class="d-flex" onsubmit="redirigir(event)">
                     <input id="token" class="form-control me-2" type="search" placeholder="Ingresa tu token" required />
                     <button class="btn btn-outline-success" type="submit">Buscar</button>
