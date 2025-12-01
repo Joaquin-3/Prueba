@@ -59,11 +59,13 @@ def pedido(request):
     data = {'form': form}
     return render(request, 'formulario.html', data)
 
-def seguimiento(request, token):
+def seguimiento(request, token=None):
+    if token is None:
+        token = request.GET.get("token", "")
+
     pedido = get_object_or_404(Pedido, token=token)
 
     data = {
         "pedido": pedido
     }
-
     return render(request, "seguimiento.html", data)

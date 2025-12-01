@@ -61,6 +61,15 @@
             </div>
         </main>
 
+
+        <div class="container mt-5 mb-3">
+            <div class="alert alert-info text-center">Para ver el estado de su pedido busque con su token aqui</div>
+                <form class="d-flex" onsubmit="redirigir(event)">
+                    <input id="token" class="form-control me-2" type="search" placeholder="Ingresa tu token" required />
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+        </div>
+
                 <div class="container mt-5 mx-5">
             <div class="row mt-5">
             {% for prod in productos %}
@@ -112,6 +121,16 @@
             </div>
         </div>
 
+
+
+
+        <script>
+        function redirigir(event) {
+            event.preventDefault();
+            const token = document.getElementById("token").value.trim();
+            window.location.href = "/seguimiento/" + token + "/";
+        }
+        </script>
 
 
 
