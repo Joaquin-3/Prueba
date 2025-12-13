@@ -1,7 +1,7 @@
 Django
+djangorestframework
 gunicorn
 psycopg2-binary
-dj-database-url
+Pillow
 whitenoise
-djangorestframework
-pillow
+dj-database-url
