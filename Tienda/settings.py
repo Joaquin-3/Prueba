@@ -17,7 +17,7 @@ SECRET_KEY = 'django-insecure-^=v$6c6r8s*zk2&00j7a=r3&fec2^1q9*kr=jdw=_wf@=wo1k+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -121,3 +121,10 @@ MEDIA_ROOT = MEDIA_DIR
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+DEBUG = os.environ.get('DEBUG') == 'True'
+
