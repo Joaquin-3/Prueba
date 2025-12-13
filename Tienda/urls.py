@@ -16,6 +16,15 @@ urlpatterns = [
     path('pedidos/add/', views.pedido, name='pedido'),
     path('pedidos/add/<slug:producto_slug>/', views.pedido, name='pedido_con_producto'),
 
+    path('api/insumos/', views.InsumoListCreateAPI.as_view()),
+    path('api/insumos/<int:pk>/', views.InsumoDetailAPI.as_view()),
+
+    path('api/pedidos/filtrar/', views.PedidoFiltroAPI.as_view()),
+    path('api/pedidos/', views.PedidoCreateAPI.as_view()),
+    path('api/pedidos/<slug:token>/', views.PedidoUpdateAPI.as_view()),
+
+
+
 ]
 
 if settings.DEBUG:

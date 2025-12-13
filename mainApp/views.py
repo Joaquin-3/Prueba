@@ -1,7 +1,14 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Producto, Categoria, Pedido
+from .models import Producto, Categoria, Pedido, Insumo
 from mainApp.forms import FormPedido
 from django.db import IntegrityError, DatabaseError
+
+from rest_framework import generics
+from rest_framework.response import Response
+from .serializers import InsumoSerializer, PedidoSerializer
+
+from rest_framework.views import APIView
+from datetime import datetime
 
 # Create your views here.
 
@@ -77,3 +84,57 @@ def seguimiento(request, token=None):
         "pedido": pedido
     }
     return render(request, "seguimiento.html", data)
+
+
+class InsumoListCreateAPI(generics.ListCreateAPIView):
+    queryset = Insumo.objects.all()
+    serializer_class = InsumoSerializer
+
+class InsumoDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Insumo.objects.all()
+    serializer_class = InsumoSerializer
+
+
+class PedidoCreateAPI(generics.CreateAPIView):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+
+class PedidoUpdateAPI(generics.RetrieveUpdateAPIView):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+    lookup_field = 'token'
+
+
+class PedidoFiltroAPI(APIView):
+
+    def post(self, request):
+        pedidos = Pedido.objects.all()
+
+        fecha_inicio = request.data.get('fecha_inicio')
+        fecha_fin = request.data.get('fecha_fin')
+        estados = request.data.get('estados')
+        limite = request.data.get('limite')
+
+        # 🔹 Filtrar por fechas
+        if fecha_inicio and fecha_fin:
+            pedidos = pedidos.filter(
+                fecha_pedido__gte=fecha_inicio,
+                fecha_pedido__lte=fecha_fin
+            )
+
+        # 🔹 Filtrar por estados
+        if estados:
+            if isinstance(estados, list):
+                pedidos = pedidos.filter(estado__in=estados)
+            else:
+                pedidos = pedidos.filter(estado=estados)
+
+        # 🔹 Limitar resultados
+        if limite:
+            try:
+                pedidos = pedidos[:int(limite)]
+            except ValueError:
+                pass
+
+        serializer = PedidoSerializer(pedidos, many=True)
+        return Response(serializer.data)
