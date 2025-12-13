@@ -1,0 +1,1 @@
+gunicorn Tienda.wsgi:application
