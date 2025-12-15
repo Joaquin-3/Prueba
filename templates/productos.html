@@ -1,43 +1,112 @@
-{% load static %}
 <!doctype html>
-<html lang="es">
-<head>
-    <title>{{ categoria.nombre }}</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<html lang="en">
+    <head>
+        <title>Title</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
 
-<body>
 
-<div class="container mt-4">
-    <h1 class="text-center">{{ categoria.nombre }}</h1>
+        <style>
+            .imagen-contenedor {
+                width: 200px;         
+                height: 200px;         
+                margin: 0 auto;        
+                display: flex;
+                align-items: center;    
+                justify-content: center; 
+                background-color: #f5f5f5;
+                border: 1px solid #ddd;  
+            }
 
-    <div class="row mt-4">
-        {% for prod in productos %}
-        <div class="col-3 mb-4">
-            <div class="card p-2">
+            .imagen-producto {
+                max-width: 100%;       
+                max-height: 100%;      
+                object-fit: contain;  
+            }
+        </style>
+    </head>
 
-                <h5 class="text-center">{{ prod.nombre }}</h5>
+    <body>
+        <header>
+            <!-- place navbar here -->
+        </header>
+        <main class="container mt-4 mb-4 alert alert-primary text-center text-dark">
+            <h1>
+                {{categoria.nombre}}
+            </h1>
+        </main>
+        <div class="container mt-5 mx-5">
+            <div class="row mt-5">
+            {% for prod in productos %}
+                <div class="col-3">
+                    <div class="card border border-2 text-dark">
 
-                {% if prod.imagen1 %}
-                    <img src="{{ prod.imagen1.url }}" class="img-fluid">
-                {% else %}
-                    <p class="text-center">Sin imagen</p>
-                {% endif %}
+                        <h2 class="text-center">
+                            {{ prod.nombre }}
+                        </h2>
+                        <div class="d-flex justify-content-center flex-wrap mt-2 text-center">
+                            {% if prod.imagen1 %}
+                                <div class="imagen-contenedor">
+                                    <img src="{{ prod.imagen1.url }}" alt="{{ prod.nombre }}" class="imagen-producto" />
+                                </div>
+                            {% elif prod.imagen2 %}
+                                <div class="imagen-contenedor">
+                                    <img src="{{ prod.imagen2.url }}" alt="{{ prod.nombre }}" class="imagen-producto" />
+                                </div>
+                            {% elif prod.imagen3 %}
+                                <div class="imagen-contenedor">
+                                    <img src="{{ prod.imagen3.url }}" alt="{{ prod.nombre }}" class="imagen-producto" />
+                                </div>
+                            {% else %}
+                                <p>No hay imagen disponible</p>
+                            {% endif %}
+                        </div>  
+                        <p class="text-center">
+                            {{ prod.descripcion }}
+                        </p>
+                        <h3 class="text-center">
+                            ${{ prod.precio }}
+                        </h3>
+                        <div class="container mt-2 text-center mb-2">
+                            <button
+                                type="button"
+                                class="btn btn-primary "
+                            >
+                                <a href="{% url 'detalle' prod.slug %}" class="text-white text-decoration-none">
+                                    Detalle
+                                </a>
+                            </button>
+                        </div>
+                    </div>   
+                     
+                </div>
+            {% endfor %}
 
-                <p class="mt-2">{{ prod.descripcion }}</p>
-                <p class="fw-bold">${{ prod.precio }}</p>
-
-                <a href="{% url 'detalle' prod.slug %}" class="btn btn-primary btn-sm">Detalle</a>
             </div>
         </div>
-        {% endfor %}
-    </div>
 
-    <a href="/" class="btn btn-secondary mt-3">Volver</a>
-</div>
-
-</body>
+        <div class="container mt-5">
+            <button
+                type="button"
+                class="btn btn-primary"
+                onclick="window.history.back()"
+            >
+                <a href="/" class="text-white text-decoration-none">
+                    Volver
+                </a>
+            </button>
+        </div>
+    </body>
 </html>
