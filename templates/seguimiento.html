@@ -36,9 +36,9 @@
         <h3>Fecha en que se solicitó:</h3>
         <p>{{ pedido.fecha_pedido }}</p>
 
-        {% if pedido.fecha_necesitado %}
+        {% if pedido.fecha_entrega_requerida %}
         <h3>Fecha requerida por el cliente:</h3>
-        <p>{{ pedido.fecha_necesitado }}</p>
+        <p>{{ pedido.fecha_entrega_requerida }}</p>
         {% endif %}
 
         {% if pedido.imagen %}

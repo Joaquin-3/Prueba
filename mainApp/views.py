@@ -115,21 +115,18 @@ class PedidoFiltroAPI(APIView):
         estados = request.data.get('estados')
         limite = request.data.get('limite')
 
-        # 🔹 Filtrar por fechas
         if fecha_inicio and fecha_fin:
             pedidos = pedidos.filter(
                 fecha_pedido__gte=fecha_inicio,
                 fecha_pedido__lte=fecha_fin
             )
 
-        # 🔹 Filtrar por estados
         if estados:
             if isinstance(estados, list):
                 pedidos = pedidos.filter(estado__in=estados)
             else:
                 pedidos = pedidos.filter(estado=estados)
 
-        # 🔹 Limitar resultados
         if limite:
             try:
                 pedidos = pedidos[:int(limite)]
