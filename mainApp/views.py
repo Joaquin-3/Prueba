@@ -9,6 +9,7 @@ from .serializers import InsumoSerializer, PedidoSerializer
 
 from rest_framework.views import APIView
 from datetime import datetime
+from rest_framework import status
 
 # Create your views here.
 
@@ -108,25 +109,38 @@ class PedidoUpdateAPI(generics.RetrieveUpdateAPIView):
 class PedidoFiltroAPI(APIView):
 
     def post(self, request):
+
+        # 👉 Si no mandan nada, mostrar formato esperado
+        if not request.data:
+            return Response({
+                "formato_esperado": {
+                    "fecha_pedido": "YYYY-MM-DD",
+                    "fecha_entrega_requerida": "YYYY-MM-DD",
+                    "estado": "Solicitado | Aprobado | En Proceso | Realizado | Entregado | Finalizado | Cancelado"
+                },
+                "ejemplo": {
+                    "fecha_pedido": "2025-12-01",
+                    "fecha_entrega_requerida": "2025-12-10",
+                    "estado": "Solicitado"
+                }
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         pedidos = Pedido.objects.all()
 
-        fecha_inicio = request.data.get('fecha_inicio')
+        fecha_pedido = request.data.get('fecha_pedido')
         fecha_entrega_requerida = request.data.get('fecha_entrega_requerida')
-        estados = request.data.get('estados')
+        estado = request.data.get('estado')
 
-        if fecha_inicio and fecha_entrega_requerida:
-            pedidos = pedidos.filter(
-                fecha_pedido__gte=fecha_inicio,
-                fecha_pedido__lte=fecha_entrega_requerida
-            )
+        # 🔹 Filtrar por fechas EXACTAS
+        if fecha_pedido:
+            pedidos = pedidos.filter(fecha_pedido=fecha_pedido)
 
-        if estados:
-            if isinstance(estados, list):
-                pedidos = pedidos.filter(estado__in=estados)
-            else:
-                pedidos = pedidos.filter(estado=estados)
+        if fecha_entrega_requerida:
+            pedidos = pedidos.filter(fecha_entrega_requerida=fecha_entrega_requerida)
 
-
+        # 🔹 Filtrar por estado
+        if estado:
+            pedidos = pedidos.filter(estado=estado)
 
         serializer = PedidoSerializer(pedidos, many=True)
         return Response(serializer.data)
