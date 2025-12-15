@@ -111,14 +111,13 @@ class PedidoFiltroAPI(APIView):
         pedidos = Pedido.objects.all()
 
         fecha_inicio = request.data.get('fecha_inicio')
-        fecha_fin = request.data.get('fecha_fin')
+        fecha_entrega_requerida = request.data.get('fecha_entrega_requerida')
         estados = request.data.get('estados')
-        limite = request.data.get('limite')
 
-        if fecha_inicio and fecha_fin:
+        if fecha_inicio and fecha_entrega_requerida:
             pedidos = pedidos.filter(
                 fecha_pedido__gte=fecha_inicio,
-                fecha_pedido__lte=fecha_fin
+                fecha_pedido__lte=fecha_entrega_requerida
             )
 
         if estados:
@@ -127,11 +126,7 @@ class PedidoFiltroAPI(APIView):
             else:
                 pedidos = pedidos.filter(estado=estados)
 
-        if limite:
-            try:
-                pedidos = pedidos[:int(limite)]
-            except ValueError:
-                pass
+
 
         serializer = PedidoSerializer(pedidos, many=True)
         return Response(serializer.data)
