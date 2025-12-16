@@ -11,6 +11,10 @@ from rest_framework.views import APIView
 from datetime import datetime
 from rest_framework import status
 
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+
+
 # Create your views here.
 
 def home(request):
@@ -110,7 +114,6 @@ class PedidoFiltroAPI(APIView):
 
     def post(self, request):
 
-        # 👉 Si no mandan nada, mostrar formato esperado
         if not request.data:
             return Response({
                 "formato_esperado": {
@@ -131,16 +134,41 @@ class PedidoFiltroAPI(APIView):
         fecha_entrega_requerida = request.data.get('fecha_entrega_requerida')
         estado = request.data.get('estado')
 
-        # 🔹 Filtrar por fechas EXACTAS
+
         if fecha_pedido:
             pedidos = pedidos.filter(fecha_pedido=fecha_pedido)
 
         if fecha_entrega_requerida:
             pedidos = pedidos.filter(fecha_entrega_requerida=fecha_entrega_requerida)
 
-        # 🔹 Filtrar por estado
+
         if estado:
             pedidos = pedidos.filter(estado=estado)
 
         serializer = PedidoSerializer(pedidos, many=True)
         return Response(serializer.data)
+    
+@login_required
+def reporte_pedidos(request):
+    pedidos = Pedido.objects.all()
+
+    fecha_inicio = request.GET.get("fecha_inicio")
+    fecha_fin = request.GET.get("fecha_fin")
+
+    if fecha_inicio:
+        pedidos = pedidos.filter(fecha_pedido__gte=fecha_inicio)
+
+    if fecha_fin:
+        pedidos = pedidos.filter(fecha_entrega_requerida__lte=fecha_fin)
+
+    pedidos_por_estado = pedidos.values("estado").annotate(total=Count("id"))
+
+    pedidos_por_origen = pedidos.values("origen").annotate(total=Count("id"))
+
+    context = {
+        "pedidos": pedidos,
+        "pedidos_por_estado": pedidos_por_estado,
+        "pedidos_por_origen": pedidos_por_origen,
+    }
+
+    return render(request, "reporte.html", context)

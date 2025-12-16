@@ -15,6 +15,8 @@ urlpatterns = [
     path('seguimiento/<slug:token>/', views.seguimiento, name='seguimiento'),
     path('pedidos/add/', views.pedido, name='pedido'),
     path('pedidos/add/<slug:producto_slug>/', views.pedido, name='pedido_con_producto'),
+    path("reporte/", views.reporte_pedidos, name="reporte_pedidos"),
+
 
     path('api/insumos/', views.InsumoListCreateAPI.as_view()),
     path('api/insumos/<int:pk>/', views.InsumoDetailAPI.as_view()),
